@@ -52,10 +52,10 @@
   (try (assoc widget :data (eval (read-string (:dataexpr widget))))
        (catch Exception e widget)))
 
-(defmulti update-dash-data [id] number?)
+(defmulti update-dash-data number?)
 
 (defmethod update-dash-data true [id]
-  (dash-update id (map update-widget-data (dash-id))))
+  (dash-update id (map update-widget-data (dash id))))
 
 (defmethod update-dash-data false [id]
   (update-dash-data (read-string id)))
