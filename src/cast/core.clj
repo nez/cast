@@ -20,6 +20,8 @@
 
 (defn uuid [] (str (java.util.UUID/randomUUID)))
 
+(def widget-defaults {:sizeX 1 :sizeY 1})
+
 (defn widget [dash-id uuid]
   (first (filter #(= uuid (:uuid %))
                  (dash dash-id))))
@@ -28,18 +30,19 @@
   [id widget]
   (dash-update id
                (conj (dash id)
-                     (assoc widget :uuid (uuid)))))
+                     (assoc (merge widget-defaults widget)
+                            :uuid (uuid)))))
 
 (defn edit-widget
   [id widget]
   (let [il-dash (dash id)
-        dash-update (map #(if (= (:uuid widget) ;TODO if you change the name then it don update
+        ildash& (map #(if (= (:uuid widget) ;TODO if you change the name then it don update
                                  (:uuid %))
                             widget
                             %)
                          il-dash)]
     (dash-update id
-                 (if (= il-dash dash-update)
+                 (if (= il-dash ildash&)
                    (conj il-dash (assoc widget :uuid (uuid)))
                    dash-update))))
 
